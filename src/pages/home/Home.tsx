@@ -1,45 +1,13 @@
 function Home() {
   return (
     <>
-      <div 
-        style={{
-          backgroundColor: '#312e82',
-          display: 'flex',
-          justifyContent: 'center'
-        }}
-      >
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            color: 'white',
-            width: '100%',
-            maxWidth: '1280px',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1rem',
-              alignItems: 'center',
-              justifyContent: 'center',
-              paddingTop: '1rem',paddingBottom: '1rem'
-            }}
-          >
-            <h2
-              style={{
-                fontSize: '3rem',
-                fontWeight: 'bold'
-              }}
-            >
+      <div >
+        <div>
+          <div>
+            <h2>
               Seja Bem vindo
             </h2>
-            <p
-              style={{
-                fontSize: '1.25rem'
-              }}
-            >
+            <p>
               Expresse aqui seus pensamentos e opniões
             </p>
             <div
