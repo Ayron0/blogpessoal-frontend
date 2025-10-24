@@ -16,9 +16,15 @@ function Footer() {
           </p>
           <p className="text-lg">Acesse nossas redes sociais</p>
           <div className="flex gap-2">
-            <LinkedinLogoIcon size={48} weight="bold" />
-            <InstagramLogoIcon size={48} weight="bold" />
-            <FacebookLogoIcon size={48} weight="bold" />
+            <a href="http://www.linkedin.com/in/ayronsantanna" target="_blank">
+              <LinkedinLogoIcon size={48} weight="bold" />
+            </a>
+            <a href="https://github.com/Ayron0/blogpessoal" target="_blank">
+              <InstagramLogoIcon size={48} weight="bold" />
+            </a>
+            <a href="https://blogpessoal-rsda.onrender.com" target="_blank">
+              <FacebookLogoIcon size={48} weight="bold" />
+            </a>
           </div>
         </div>
       </div>
