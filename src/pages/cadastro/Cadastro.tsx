@@ -152,7 +152,7 @@ function Cadastro() {
             >
               {isLoading ? <ClipLoader color="#ffffff" size={20} /> :
                <span>Cadastrar</span>
-               }
+              }
               
             </button>
           </div>
