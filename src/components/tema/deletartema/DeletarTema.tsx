@@ -67,20 +67,20 @@ function DeletarTema() {
   function retornar() {
     navigate("/temas")
   }
-
+// border flex flex-col rounded-2xl overflow-hidden justify-between w-90
   return (
-    <div className="border flex flex-col rounded-2xl overflow-hidden justify-between w-90">
+    <div className="border rounded-2xl overflow-hidden container w-1/3 m-auto mt-4">
       <header className="py-2 px-6 bg-indigo-800  text-white font-bold text-2xl">Tema</header>
       <p className='p-8 text-3xl bg-slate-200 h-full'>{tema.descricao}</p>
 
       <div className="flex">
-        <button className=" text-slate-100 bg-red-400 hover:bg-red-700 w-full py-2"
+        <button className="w-full text-slate-100 bg-red-400 hover:bg-red-700 flex items-center justify-center py-2"
           onClick={retornar}
         >
           Não
         </button>
 
-        <button className="text-slate-100 bg-indigo-400 hover:bg-indigo-800
+        <button className=" w-full text-slate-100 bg-indigo-400 hover:bg-indigo-800
           flex items-center justify-center"
           onClick={deletarTema}
           
