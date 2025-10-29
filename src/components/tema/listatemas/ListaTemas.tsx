@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import CardTema from "../cardtema/CardTema"
+import { SyncLoader } from 'react-spinners';
 import { buscar } from "../../../services/Service";
 import { useNavigate } from "react-router-dom";
 import type Tema from "../../../model/Tema";
@@ -43,10 +44,27 @@ function ListaTemas() {
 
   return (
     <>
+      {isLoading && (
+        <div className=" flex justify-center w-full my-8">
+          <SyncLoader
+                color="#312e81"
+              size={32}
+           />
+        </div>
+      )}
       <div className="flex justify-center w-full my-4">
         <div className="containner flex flex-col">
+          {(!isLoading && temas.length === 0) && (
+            <span className="text-3xl text-center my-8">
+              Nenhum Tema foi encontrado!
+            </span>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <CardTema />
+            {
+              temas.map((tema) => (
+                <CardTema key={tema.id} tema={tema}/>
+              ))
+            }
           </div>
         </div>
       </div>
