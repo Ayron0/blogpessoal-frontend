@@ -74,7 +74,7 @@ function DeletarTema() {
       <p className="text-center font-semibold mb-4">
         Você tem certeza de que deseja apagar o tema a seguir?
       </p>
-      <div className="border rounded-2xl overflow-hidden  mt-4">
+      <div className="border flex flex-col rounded-2xl overflow-hidden justify-between">
         <header className="py-2 px-6 bg-indigo-800  text-white font-bold text-2xl">Tema</header>
         <p className='p-8 text-3xl bg-slate-200 h-full'>{tema.descricao}</p>
 
