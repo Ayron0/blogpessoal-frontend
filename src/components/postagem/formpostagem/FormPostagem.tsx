@@ -4,23 +4,38 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import { buscar, atualizar, cadastrar } from "../../../services/Service";
 import type Postagem from "../../../model/Postagem";
 import { ClipLoader } from 'react-spinners';
+import type Tema from "../../../model/Tema";
 
 
 function FormPostagem() {
 
   const navigate = useNavigate();
-
-  //({} as Postagem) serve para informar que o estado inicial será um objeto do tipo Tema e que será um objeto vazio
-  const [tema, setTema] = useState<Tema>({} as Tema)
-
   const[isLoading, setIsLoading] = useState<boolean>(false)
+
+  const [temas, setTemas] = useState<Tema[]>([])
+
+  const [tema, setTema] = useState<Tema>({ id: 0, descricao: '',})
+
+  const [postagem, setPostagem] = useState<Postagem>({} as Postagem)
 
   const {usuario, handleLogout} = useContext(AuthContext)
   const token = usuario.token
 
   const {id} = useParams<{id: string}>();
 
-  async function buscarPor(id: string) {
+  async function buscarPostagemPorId(id: string) {
+    try {
+      await buscar(`/postagens/${id}`, setPostagem, {
+        headers: { Authorization: token} 
+      })
+    } catch (error: any) {
+      if (error.toString().includes('401')) {
+        handleLogout()
+      }
+    }
+  }
+
+  async function buscarTemaPorId(id: string) {
     try {
       await buscar(`/temas/${id}`, setTema, {
         headers: { Authorization: token} 
@@ -32,6 +47,18 @@ function FormPostagem() {
     }
   }
 
+  async function buscarTemas() {
+      try {
+        await buscar('/temas', setTemas, {
+          headers: { Authorization: token} 
+        })
+      } catch (error: any) {
+        if (error.toString().includes('401')) {
+          handleLogout()
+        }
+      }
+    }
+
   useEffect(() => {
       if (token === "") {
         alert("Você precisa estar logado")
@@ -40,67 +67,80 @@ function FormPostagem() {
     }, [token])
     
   useEffect(() => {
+    buscarTemas()
     if(id !== undefined) {
-      buscarPor(id)
+      buscarPostagemPorId(id)
     }
   },[id])
 
-  function atualizarEstado(e: ChangeEvent<HTMLInputElement>){
-    setTema({
-      ...tema,
-      [e.target.name]: e.target.value
+  useEffect(() => {
+    setPostagem({
+      ...postagem,
+      tema: tema,
     })
+  }, [tema])
+
+  function atualizarEstado(e: ChangeEvent<HTMLInputElement>){
+    setPostagem({
+      ...postagem,
+      [e.target.name]: e.target.value,
+      tema: tema,
+      usuario: usuario,
+    });
   }
 
   function retornar() {
-    navigate("/temas")
+    navigate("/postagens")
   }
 
-  async function gerarNovoTema(e: FormEvent<HTMLFormElement>) {
+  async function gerarNovaPostagem(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setIsLoading(true)
 
     if (id  !== undefined) {
       try {
-        await atualizar(`/temas`, tema, setTema, {
-          headers: { 'Authorization': token }
-        })
-        alert('Tema atualizado com sucesso!')
+        await atualizar(`/postagens`, postagem, setPostagem, {
+          headers: { 'Authorization': token },
+        });
+
+        alert('Postagem atualizada com sucesso!')
       } catch (error: any) {
         if (error.toString().includes('401')) {
           handleLogout();
         } else {
-          alert('Erro ao atualizar o tema.')
+          alert('Erro ao atualizar a Postagem.')
         }
       }
 
     } else {
       try {
-        await cadastrar(`/temas`, tema, setTema, {
-          headers: { 'Authorization': token }
-        })
-        alert('O Tema cadastrado com sucesso!')   
+        await cadastrar(`/postagens`, postagem, setPostagem, {
+          headers: { 'Authorization': token },
+        });
+
+        alert('Postagem cadastrada com sucesso!')   
       } catch (error: any) {
         if (error.toString().includes('401')) {
           handleLogout();
         } else {
-          alert('Erro ao cadastrar o tema.')
+          alert('Erro ao atualizar a Postagem.')
         }
       }
     }
 
     setIsLoading(false)
     retornar()
-
   }
+
+  const carregandoTema = tema.descricao === '';
 
   return (
     <div className="container flex flex-col items-center mx-auto">
       <h1 className="text-4xl text-center my-8">
-        {id === undefined ? 'Cadastrar Postagem' : 'Editar Postagem'}
+        {id === undefined ? 'Editar Postagem' : 'Cadastrar Postagem'}
       </h1>
       <form className="w-1/2  flex flex-col gap-4"
-        onSubmit={gerarNovoPostagem}>
+        onSubmit={gerarNovaPostagem}>
         <div className=" flex flex-col gap-2">
           <label htmlFor="titulo" >Título da Postagem</label>
           <input 
@@ -130,11 +170,14 @@ function FormPostagem() {
         <div className=" flex flex-col gap-2">
           <p>Tema da Postagem</p>
           <select name="tema" id="tema" className="border-2 border-slate-800 rounded"
+            onChange={(e) => buscarTemaPorId(e.currentTarget.value)}
           >
             <option value="" selected disabled>Selecione um Tema</option>
-            <>
-              <option value="">Tema 1</option>
-            </>
+            {temas.map((tema) =>(
+              <>
+                <option value={tema.id}>{tema.descricao}</option>
+              </>
+            ))}
           </select>
         </div>
 
@@ -142,6 +185,7 @@ function FormPostagem() {
           className="rounded disabled:bg-slate-200 bg-indigo-400 hover:bg-indigo-800 text-white 
               font-bold w-1/2 py-2 mx-auto flex justify-center"
             type="submit"
+            disabled={carregandoTema}
         >
           {isLoading ? 
             <ClipLoader 
