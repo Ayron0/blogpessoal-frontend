@@ -5,6 +5,7 @@ import { buscar } from "../../../services/Service";
 import { useNavigate } from "react-router-dom";
 import type Tema from "../../../model/Tema";
 import { AuthContext } from "../../../contexts/AuthContext";
+import { ToastAlerta } from "../../../utils/ToastAlerta";
 
 function ListaTemas() {
 
@@ -17,7 +18,7 @@ function ListaTemas() {
 
   useEffect(() => {
     if (token === "") {
-      alert("Você precisa estar logado")
+      ToastAlerta('Você precisa estar logado', 'info')
       navigate("/")
     }
   }, [token])
