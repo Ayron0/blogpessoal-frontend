@@ -43,7 +43,7 @@ function Navbar() {
 
     return (
         <>
-            { component }
+            { component } {/*Renderiza mostrando o*/}
         </>
     )
 }
