@@ -5,7 +5,7 @@ import { ToastAlerta } from "../utils/ToastAlerta";
 
 interface AuthContextProps {
   usuario: UsuarioLogin
-  handleLegout(): void
+  handleLogout(): void
   handleLogin(dados: UsuarioLogin): Promise<void>
   isLoading: boolean
 }
@@ -41,7 +41,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  function handleLegout() {
+  function handleLogout() {
     setUsuario({
       id: 0,
       nome: "",
@@ -53,7 +53,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ usuario, handleLegout, handleLogin, isLoading }}>
+    <AuthContext.Provider value={{ usuario, handleLogout, handleLogin, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
